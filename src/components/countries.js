@@ -1,13 +1,15 @@
-import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client';
+import {
+  ApolloClient, InMemoryCache, gql, HttpLink,
+} from '@apollo/client';
 
 export const GetStaticCountries = async () => {
-    const client = new ApolloClient({
-      uri: 'http://countries.trevorblades.com/',
-      link: new HttpLink({uri: 'http://countries.trevorblades.com',fetch}),
-      cache: new InMemoryCache(),
-    });
-    const { data } = await client.query({
-      query: gql`
+  const client = new ApolloClient({
+    uri: 'http://countries.trevorblades.com/',
+    link: new HttpLink({ uri: 'http://countries.trevorblades.com', fetch }),
+    cache: new InMemoryCache(),
+  });
+  const { data } = await client.query({
+    query: gql`
       query {
         countries {
           name,
@@ -16,18 +18,18 @@ export const GetStaticCountries = async () => {
         }
       }
       `,
-    });
+  });
 
-    return {countries	: data.countries};
-  }
+  return { countries: data.countries };
+};
 
-  export const GetStaticCountry = async(code) => {
-    const client = new ApolloClient({
-      uri: 'http://countries.trevorblades.com/',
-      cache: new InMemoryCache(),
-    });
-    const { data } = await client.query({
-      query: gql`
+export const GetStaticCountry = async (code) => {
+  const client = new ApolloClient({
+    uri: 'http://countries.trevorblades.com/',
+    cache: new InMemoryCache(),
+  });
+  const { data } = await client.query({
+    query: gql`
       query($code: ID!) {
         country(code: $code) {
           name,
@@ -37,8 +39,9 @@ export const GetStaticCountries = async () => {
           phone
         }
       }
-      `, variables: {code}
-    });
+      `,
+    variables: { code },
+  });
 
-    return {country	: data.country};
-  }
+  return { country: data.country };
+};

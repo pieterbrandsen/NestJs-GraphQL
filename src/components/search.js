@@ -8,13 +8,13 @@ export default function Search() {
   const [active, setActive] = useState(false);
   const [results, setResults] = useState([]);
 
-  const searchEndpoint = (query) => `/api/search?q=${query}`;
+  const searchEndpoint = (q) => `/api/search?q=${q}`;
 
   const onChange = useCallback((event) => {
-    const query = event.target.value;
-    setQuery(query);
-    if (query.length) {
-      fetch(searchEndpoint(query))
+    const eventQuery = event.target.value;
+    setQuery(eventQuery);
+    if (eventQuery.length) {
+      fetch(searchEndpoint(eventQuery))
         .then((res) => res.json())
         .then((res) => {
           setResults(res.results);
@@ -24,16 +24,16 @@ export default function Search() {
     }
   }, []);
 
-  const onFocus = useCallback(() => {
-    setActive(true);
-    window.addEventListener('click', onClick);
-  }, []);
-
   const onClick = useCallback((event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setActive(false);
       window.removeEventListener('click', onClick);
     }
+  }, []);
+
+  const onFocus = useCallback(() => {
+    setActive(true);
+    window.addEventListener('click', onClick);
   }, []);
 
   return (

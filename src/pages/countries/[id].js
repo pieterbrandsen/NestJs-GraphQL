@@ -1,10 +1,9 @@
-import { ApolloClient, InMemoryCache, gql, HttpLink } from '@apollo/client';
-import Head from 'next/head'
-import styles from '../../styles/Home.module.css';
-import { GetStaticCountries, GetStaticCountry } from '../../components/countries';
-import Card from "react-bootstrap/Card"
+import Head from 'next/head';
+import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+import { GetStaticCountries, GetStaticCountry } from '../../components/countries';
+import styles from '../../styles/Home.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Country({ country }) {
@@ -27,28 +26,26 @@ export default function Country({ country }) {
 </Card>
       </main>
       </div>
-  )
+  );
 }
 
 export async function getStaticPaths() {
-  const paths = await (await GetStaticCountries()).countries.map((country)=> {
-    return {
-      params: {
-        id: country.code
-      }
-    }
-  })
+  const paths = await (await GetStaticCountries()).countries.map((country) => ({
+    params: {
+      id: country.code,
+    },
+  }));
   return {
     paths,
-    fallback: "blocking"
-  }
+    fallback: 'blocking',
+  };
 }
 
 export async function getStaticProps({ params }) {
   const countryData = await GetStaticCountry(params.id.toString());
   return {
     props: {
-      country: countryData.country
-    }
-  }
+      country: countryData.country,
+    },
+  };
 }
